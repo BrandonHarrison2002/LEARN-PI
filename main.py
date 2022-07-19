@@ -1,9 +1,14 @@
 import pi, keyboard, os, pygame, sys
 from playsound import playsound
 
+#timer
+
 #PYGAME INIT
 pygame.init()
+with open('startdigit.txt') as f: 
+    starting = int(f.read())
 
+#assets
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode([600, 64])
 base_font = pygame.font.Font(None, 32)
@@ -11,34 +16,35 @@ input_rect = pygame.Rect(0, 0, 600, 32)
 score_rect = pygame.Rect(0, 32, 600, 64)
 color2 = pygame.Color('green')
 color = pygame.Color('black')
-user_text = '3.'
-
+pi_array = [char for char in pi.value]
 jumpscare = pygame.mixer.Sound("sound.mp3")
 
-
-#STATS
-num = 0
+#startup
+user_text = '3.'
+num = starting
 error = 0 
 deno = len(pi.value)
 n = 0
-
-pi_array = [char for char in pi.value]
 for x in range(num):
     user_text += pi_array[x]
 
 while True:
     for event in pygame.event.get():
-  
-      # if user types QUIT then the screen will close
-        if event.type == pygame.QUIT:
-            print(f'{pi_array[num]}{pi_array[num+1]}{pi_array[num+2]}{pi_array[num+3]}{pi_array[num+4]}{pi_array[num+5]}')
-            pygame.quit()
-            sys.exit()
-
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_BACKSPACE or event.key == 113:
                 pygame.quit()
                 sys.exit()
+            elif event.key == 114:
+                for x in range(5): print(pi_array[num+x], end='')
+                print()
+                #startup
+                user_text = '3.'
+                num = starting
+                error = 0 
+                deno = len(pi.value)
+                n = 0
+                for x in range(num):
+                    user_text += pi_array[x]
             elif event.key >=48 and event.key <=57:
                 if event.key == ord(pi_array[num]):
                     num+=1
@@ -58,7 +64,7 @@ while True:
     screen.blit(text_surface, (input_rect.x+5, input_rect.y+5))
 
     screen.blit(base_font.render(f'SCORE: {num}', True, (255,0,0)), (10, 38))
-    screen.blit(base_font.render(f'ERROR: {error}', True, (255,0,0)), (300, 38))
+    screen.blit(base_font.render(f'ERRORS: {error}', True, (255,0,0)), (300, 38))
 
 
     input_rect.w = max(100, text_surface.get_width()+10)
