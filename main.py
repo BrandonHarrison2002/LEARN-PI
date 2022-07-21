@@ -37,6 +37,8 @@ while True:
             elif event.key == 114:
                 for x in range(5): print(pi_array[num+x], end='')
                 print()
+                with open('startdigit.txt') as f: 
+                    starting = int(f.read())
                 #startup
                 user_text = '3.'
                 num = starting
